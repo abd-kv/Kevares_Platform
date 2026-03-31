@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ROS2 WebSocket Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js"></script>
+</head>
+<body>
+  <h1>ROS 2 WebSocket Example</h1>
+  <pre id="output"></pre>
+
+  <script>
+    const ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', () => {
+      console.log('✅ Connected to rosbridge!');
+    });
+
+    ros.on('error', (error) => {
+      console.error('❌ Error connecting to rosbridge:', error);
+    });
+
+    ros.on('close', () => {
+      console.log('🚪 Connection closed.');
+    });
+
+    const listener = new ROSLIB.Topic({
+      ros: ros,
+      name: 'can_feedback',
+      messageType: 'std_msgs/msg/String' // or other message type
+    });
+
+    listener.subscribe((message) => {
+      document.getElementById('output').textContent += '\n📨 Received: ' + JSON.stringify(message);
+    });
+  </script>
+</body>
+</html>
