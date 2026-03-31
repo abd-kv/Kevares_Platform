@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<robot name="hunter_2_0">
+  <!-- Base Link -->
+  <link name="base_link">
+    <inertial>
+      <mass value="50.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="2.5" ixy="0" ixz="0" iyy="2.5" iyz="0" izz="2.5"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box>
+          <size>1.0 0.7 0.4</size> <!-- Length, Width, Height -->
+        </box>
+      </geometry>
+      <material>
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Wheels -->
+  <link name="wheel_front_left">
+    <visual>
+      <geometry>
+        <cylinder>
+          <radius>0.125</radius>
+          <length>0.05</length>
+        </cylinder>
+      </geometry>
+      <material>
+        <color rgba="0.1 0.1 0.1 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <link name="wheel_front_right">
+    <visual>
+      <geometry>
+        <cylinder>
+          <radius>0.125</radius>
+          <length>0.05</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+  <link name="wheel_rear_left">
+    <visual>
+      <geometry>
+        <cylinder>
+          <radius>0.125</radius>
+          <length>0.05</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+  <link name="wheel_rear_right">
+    <visual>
+      <geometry>
+        <cylinder>
+          <radius>0.125</radius>
+          <length>0.05</length>
+        </cylinder>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Joints -->
+  <joint name="joint_front_left" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_front_left"/>
+    <origin xyz="0.4 0.3 0.125" rpy="0 0 0"/>
+  </joint>
+  <joint name="joint_front_right" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_front_right"/>
+    <origin xyz="0.4 -0.3 0.125" rpy="0 0 0"/>
+  </joint>
+  <joint name="joint_rear_left" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_rear_left"/>
+    <origin xyz="-0.4 0.3 0.125" rpy="0 0 0"/>
+  </joint>
+  <joint name="joint_rear_right" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_rear_right"/>
+    <origin xyz="-0.4 -0.3 0.125" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Gazebo Plugin for Skid Steering -->
+  <gazebo>
+    <plugin name="skid_steering_plugin" filename="libgazebo_ros_skid_steer_drive.so">
+      <robotNamespace>/</robotNamespace>
+      <leftJoint>joint_front_left</leftJoint>
+      <leftJoint>joint_rear_left</leftJoint>
+      <rightJoint>joint_front_right</rightJoint>
+      <rightJoint>joint_rear_right</rightJoint>
+      <wheelSeparation>0.8</wheelSeparation> <!-- Front to Rear Distance -->
+      <wheelDiameter>0.25</wheelDiameter>
+      <torque>5</torque>
+    </plugin>
+  </gazebo>
+</robot>
+
